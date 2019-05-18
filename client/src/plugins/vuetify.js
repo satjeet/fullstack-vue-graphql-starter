@@ -15,7 +15,7 @@ Vue.use(Vuetify, {
     accent: "#ffc107",
     error: "#ff5722",
     warning: "#f44336",
-    info: "#8bc34a",
+    info: "#ff5722",
     success: "#2196f3"
   }
 });
