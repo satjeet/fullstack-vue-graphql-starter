@@ -76,6 +76,8 @@
 
       <!-- Search Input -->
       <v-text-field
+        v-model="searchTerm"
+        @input="handleSearchPosts"
         flex
         prepend-icon="search"
         placeholder="Search posts"
@@ -83,6 +85,31 @@
         single-line
         hide-details
       ></v-text-field>
+
+      <!-- Search Results Card -->
+      <v-card
+        dark
+        v-if="searchResults.length"
+        id="search__card"
+      >
+        <v-list>
+          <v-list-tile
+            v-for="result in searchResults"
+            :key="result._id"
+            @click="goToSearchResult(result._id)"
+          >
+            <v-list-tile-title>
+              {{result.title}} -
+              <span class="font-weight-thin">{{formatDescription(result.description)}}</span>
+            </v-list-tile-title>
+
+            <!-- Show Icon if Result Favorited by User -->
+            <v-list-tile-action v-if="checkIfUserFavorite(result._id)">
+              <v-icon>favorite</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-card>
 
       <v-spacer></v-spacer>
 
@@ -193,6 +220,7 @@ export default {
   name: "App",
   data() {
     return {
+      searchTerm: "",
       sideNav: false,
       authSnackbar: false,
       authErrorSnackbar: false,
@@ -221,7 +249,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["authError", "user", "userFavorites"]),
+    ...mapGetters(["searchResults", "authError", "user", "userFavorites"]),
     horizontalNavItems() {
       let items = [
         { icon: "chat", title: "Posts", link: "/posts" },
@@ -250,6 +278,28 @@ export default {
     }
   },
   methods: {
+    handleSearchPosts() {
+      this.$store.dispatch("searchPosts", {
+        searchTerm: this.searchTerm
+      });
+    },
+    goToSearchResult(resultId) {
+      // Clear search term
+      this.searchTerm = "";
+      // Go to desired result
+      this.$router.push(`/posts/${resultId}`);
+      // Clear search results
+      this.$store.commit("clearSearchResults");
+    },
+    formatDescription(desc) {
+      return desc.length > 30 ? `${desc.slice(0, 30)}...` : desc;
+    },
+    checkIfUserFavorite(resultId) {
+      return (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === resultId)
+      );
+    },
     handleSignoutUser() {
       this.$store.dispatch("signoutUser");
     },
@@ -274,6 +324,15 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+
+/* Search Results Card */
+#search__card {
+  position: absolute;
+  width: 100vw;
+  z-index: 8;
+  top: 100%;
+  left: 0%;
 }
 
 /* User Favorite Animation */
