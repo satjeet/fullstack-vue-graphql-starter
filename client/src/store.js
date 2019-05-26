@@ -9,6 +9,7 @@ import {
   GET_POSTS,
   ADD_POST,
   GET_USER_POSTS,
+  INFINITE_SCROLL_POSTS,
   UPDATE_USER_POST,
   DELETE_USER_POST,
   SEARCH_POSTS,
@@ -143,7 +144,17 @@ export default new Vuex.Store({
               _id: -1,
               ...payload
             }
-          }
+          },
+          // Rerun specified queries after performing the mutation in order to get fresh data
+          refetchQueries: [
+            {
+              query: INFINITE_SCROLL_POSTS,
+              variables: {
+                pageNum: 1,
+                pageSize: 2
+              }
+            }
+          ]
         })
         .then(({ data }) => {
           console.log(data.addPost);
