@@ -57,6 +57,6 @@ const server = new ApolloServer({
     return { User, Post, currentUser: await getUser(token) };
   }
 });
-server.listen().then(({ url }) => {
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
   console.log(`server escuchando ${url}`);
 });
