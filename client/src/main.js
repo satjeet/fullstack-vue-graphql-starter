@@ -1,4 +1,4 @@
-import "@babel/polyfill";
+//import "@babel/polyfill";
 import Vue from "vue";
 import "./plugins/vuetify";
 import App from "./App.vue";
@@ -16,7 +16,7 @@ Vue.component("form-alert", FormAlert);
 Vue.use(VueApollo);
 
 export const defaultClient = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://vuesharetutorial.herokuapp.com/graphql",
   // include auth token with requests made to backend
   fetchOptions: {
     credentials: "include"
