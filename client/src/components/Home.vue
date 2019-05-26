@@ -1,5 +1,6 @@
 <template>
   <v-container text-xs-center>
+    <!-- Loading Spinner -->
     <v-layout row>
       <v-dialog
         v-model="loading"
@@ -22,7 +23,25 @@
         </v-container>
       </v-dialog>
     </v-layout>
+    <!-- Explore Posts Button -->
+    <v-layout
+      class="mt-2 mb-3"
+      row
+      wrap
+      v-if="!loading"
+    >
+      <v-flex xs12>
+        <v-btn
+          class="secundary"
+          to="/posts"
+          large
+          dark
+        >Explore Posts</v-btn>
+      </v-flex>
 
+    </v-layout>
+
+    <!-- Post carrusel -->
     <v-flex xs12>
       <v-carousel
         v-if="!loading && posts.length > 0"
@@ -35,8 +54,7 @@
           :src="post.imageUrl"
           @click.native="goToPost(post._id)"
         >
-          <h1 id="
-          carousel__title">{{post.title}}</h1>
+          <h1 id="carousel__title">{{post.title}}</h1>
         </v-carousel-item>
       </v-carousel>
     </v-flex>
@@ -52,9 +70,6 @@ export default {
     this.handleGetCarouselPosts();
   },
   computed: {
-    /*posts() {
-      return this.$store.getters.posts;
-    }*/
     ...mapGetters(["loading", "posts"])
   },
   methods: {
@@ -72,6 +87,7 @@ export default {
 <style>
 #carousel__title {
   position: absolute;
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 5px 5px 0 0;

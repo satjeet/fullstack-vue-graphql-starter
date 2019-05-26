@@ -68,6 +68,7 @@
             hover
           >
             <v-card-media
+              @click="goToPost(favorite._id)"
               height="30vh"
               :src="favorite.imageUrl"
             ></v-card-media>
@@ -134,6 +135,7 @@
             </v-btn>
 
             <v-card-media
+              @click="goToPost(post._id)"
               height="30vh"
               :src="post.imageUrl"
             ></v-card-media>
@@ -286,6 +288,9 @@ export default {
     this.handleGetUserPosts();
   },
   methods: {
+    goToPost(id) {
+      this.$router.push(`/posts/${id}`);
+    },
     formatJoinDate(date) {
       return moment(new Date(date)).format("ll");
     },

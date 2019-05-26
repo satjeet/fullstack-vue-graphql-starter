@@ -17,12 +17,12 @@
         :key="post._id"
       >
         <v-card hover>
-          <v-img
+          <v-card-media
             @click.native="goToPost(post._id)"
             :src="post.imageUrl"
             height="30vh"
             lazy
-          ></v-img>
+          ></v-card-media>
 
           <v-card-actions>
             <v-card-title primary>
@@ -95,7 +95,6 @@
 
 <script>
 import moment from "moment";
-
 import { INFINITE_SCROLL_POSTS } from "../../queries";
 
 const pageSize = 2;
@@ -105,7 +104,7 @@ export default {
   data() {
     return {
       pageNum: 1,
-      showMoreEnabled: true,
+      //showMoreEnabled: true,
       showPostCreator: false
     };
   },
@@ -118,12 +117,17 @@ export default {
       }
     }
   },
+  computed: {
+    showMoreEnabled() {
+      return this.infiniteScrollPosts && this.infiniteScrollPosts.hasMore;
+    }
+  },
   methods: {
-    formatCreatedDate(date) {
-      return moment(new Date(date)).format("ll");
-    },
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`);
+    },
+    formatCreatedDate(date) {
+      return moment(new Date(date)).format("ll");
     },
     showMorePosts() {
       this.pageNum += 1;
@@ -140,7 +144,7 @@ export default {
 
           const newPosts = fetchMoreResult.infiniteScrollPosts.posts;
           const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore;
-          this.showMoreEnabled = hasMore;
+          //this.showMoreEnabled = hasMore;
 
           return {
             infiniteScrollPosts: {
